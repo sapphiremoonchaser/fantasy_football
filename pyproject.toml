@@ -1,0 +1,27 @@
+[project]
+name = "fantasy_football"
+version = "1.0.0.0"
+requires-python = ">=3.10"
+dependencies = [
+    "nfl_data_py~=0.3.3",
+    "pandas~=1.5.3"
+]
+
+[project.optional-dependencies]
+dev = [
+]
+
+[build-system]
+requires = [
+    "setuptools>=61.0",
+    "wheel>=0.45.1"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+python_files = "test_*.py"
+testpaths = ["tests"]
+addopts = "-v --cov=src/fantasy_football --cov-report=html"

@@ -1,21 +1,14 @@
 """Player class for representing nfl players.
 
 Classes:
-    Player: A Pydantic model representing an nfl player with field constaints for age, weight, height,
+    Player: A Pydantic model representing an nfl player with field constraints for age, weight, height,
             a validator to calculate age, and properties to track if the player is currently active
             and first string.
 """
-from numpy.distutils.system_info import dfftw_info
-from numpy.ma.extras import column_stack
 from pydantic import (
     BaseModel,
     Field,
     field_validator
-)
-from typing import (
-    Union,
-    List,
-    Optional,
 )
 import re
 import nfl_data_py as nfl

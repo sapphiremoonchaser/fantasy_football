@@ -4,7 +4,9 @@ version = "1.0.0.0"
 requires-python = ">=3.10"
 dependencies = [
     "nfl_data_py~=0.3.3",
-    "pandas~=1.5.3"
+    "pandas~=1.5.3",
+    "pydantic~=2.10.6",
+    "pydantic-settings~=2.8.1.0",
 ]
 
 [project.optional-dependencies]

@@ -21,7 +21,7 @@ class Player(BaseModel):
         player_id (str): the nflverse player id
         espn_id (int): espn identifier
         status (str): whether or not the player is active
-        team (str): the team the player currently plays for
+        team_abbr (str): the team the player currently plays for
         position (str): one of ('QB', 'RB', 'WR', 'TE', 'DEF')
         height (float): player's height
         weight (int): player's weight
@@ -32,14 +32,14 @@ class Player(BaseModel):
     player_id: str = Field(min_length=10, max_length=10, frozen=True)
     espn_id: int = Field(frozen=True)
     player_name: str = Field(min_length=1, frozen=True)
-    status: str = Field(min_length=3, max_length=3, frozen=True)
-    team: str = Field(min_length=2, max_length=3, frozen=True)
-    position: str = Field(min_length=1, max_length=3, frozen=True)
-    height: float = Field(gt=50, frozen=True)
-    weight: float = Field(gt=100, frozen=True)
+    status: str = Field(min_length=2, max_length=3, frozen=False)
+    team_abbr: str = Field(min_length=2, max_length=3, frozen=False)
+    position: str = Field(min_length=1, max_length=3, frozen=False)
+    height: float = Field(gt=60, lt=90, frozen=False)
+    weight: float = Field(gt=150, lt=450, frozen=False)
     college: str = Field(min_length=1, frozen=True)
-    years_exp: int = Field(frozen=True)
-    age: float = Field(ge=18, frozen=True)
+    years_exp: int = Field(frozen=False)
+    age: float = Field(ge=18, frozen=False)
 
 # Property for is active
 @property

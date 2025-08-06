@@ -1,9 +1,7 @@
-"""PasserMetrics class for representing nfl quarterbacks (and other players who may have passed the ball).
+"""PassingMetrics class for representing nfl quarterbacks (and other players who may have passed the ball).
 
 Classes:
-    Player: A Pydantic model representing an nfl player with field constraints for age, weight, height,
-            a validator to calculate age, and properties to track if the player is currently active
-            and first string.
+    PassingMetrics: A Pydantic data model reprsenting weekly passing metrics
 """
 import re
 

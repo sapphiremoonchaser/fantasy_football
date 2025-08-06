@@ -23,8 +23,8 @@ class Player(BaseModel):
         status (str): whether or not the player is active
         team_abbr (str): the team the player currently plays for
         position (str): one of ('QB', 'RB', 'WR', 'TE', 'DEF')
-        height (float): player's height
-        weight (int): player's weight
+        height (float): player's height (inches)
+        weight (int): player's weight (pounds)
         college (str): college the player was drafted from
         years_exp (int): years played in the nfl
         age (float): age of the player

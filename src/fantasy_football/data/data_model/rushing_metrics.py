@@ -1,7 +1,7 @@
 """RushingMetrics class for representing nfl running backs (and other players who may have ran the ball).
 
 Classes:
-    RushingMetrics: A Pydantic data model reprsenting weekly rushing metrics
+    RushingMetrics: A Pydantic data model representing weekly rushing metrics
 """
 import re
 from pydantic import BaseModel, Field, field_validator

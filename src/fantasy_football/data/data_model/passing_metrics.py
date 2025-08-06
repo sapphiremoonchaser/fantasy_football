@@ -1,7 +1,7 @@
 """PassingMetrics class for representing nfl quarterbacks (and other players who may have passed the ball).
 
 Classes:
-    PassingMetrics: A Pydantic data model reprsenting weekly passing metrics
+    PassingMetrics: A Pydantic data model representing weekly passing metrics
 """
 import re
 

@@ -86,7 +86,7 @@ def validate_player_id(
         v: str
 ) -> str:
     """Validate that player_id matches the format ##_####### (two digits, underscore, seven digits)."""
-    pattern = r'^\d{2}_\d{7}$'
+    pattern = r'^\d{2}-\d{7}$'
 
     if not re.match(pattern, v):
         raise ValueError(f"Player ID {v} does not match format ##_#######.")

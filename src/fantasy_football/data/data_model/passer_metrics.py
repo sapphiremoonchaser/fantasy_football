@@ -21,12 +21,12 @@ class PassingMetrics(BaseModel):
     validate and parse data from sources like the provided NGS passing sample CSV.
 
     Attributes:
-        player_id (str): the nflverse player id (player_gsis_id in next-gen-stats)
+        gsis_id (str): the nflverse player id (player_gsis_id in next-gen-stats)
         season (int): The NFL season year (e.g., 2024).
         season_type (str): The type of season (e.g., 'REG' for regular season).
         week (int): The week of the season (0 for season-level aggregation).
         position (str): The player's position (e.g., 'QB').
-        team (str): The team abbreviation (e.g., 'PHI' for Philadelphia Eagles).
+        team_abbr (str): The team abbreviation (e.g., 'PHI' for Philadelphia Eagles).
         avg_time_to_throw (float): Average time (in seconds) taken to throw the ball.
         avg_completed_air_yards (float): Average air yards on completed passes.
         avg_intended_air_yards (float): Average intended air yards on all pass attempts.
@@ -37,7 +37,7 @@ class PassingMetrics(BaseModel):
         attempts (int): Total pass attempts.
         pass_yards (float): Total passing yards.
         pass_touchdowns (int): Total passing touchdowns.
-        interceptions (float): Total interceptions thrown.
+        interceptions (int): Total interceptions thrown.
         passer_rating (float): Quarterback passer rating.
         completions (int): Total completed passes.
         completion_percentage (float): Percentage of passes completed.
@@ -46,12 +46,12 @@ class PassingMetrics(BaseModel):
         avg_air_distance (float): Average air distance of passes.
         max_air_distance (float): Maximum air distance of any pass attempt.
     """
-    player_id: str = Field(min_length=10, max_length=10, frozen=True)
+    gsis_id: str = Field(min_length=10, max_length=10, frozen=True)
     season: int = Field(ge=1999, le=2025, frozen=True)
-    season_type: str = Field(min_length=3, max_length=3, frozen=True)
-    week: int = Field(gt=0, frozen=True)
+    season_type: str = Field(min_length=3, max_length=4, frozen=True)
+    week: int = Field(ge=0, frozen=True)
     position: str = Field(frozen=True)
-    team: str = Field(min_length=2, max_length=3, frozen=True)
+    team_abbr: str = Field(min_length=2, max_length=3, frozen=True)
     avg_time_to_throw: float = Field(ge=0, frozen=True)
     avg_completed_air_yards: float = Field(ge=0, frozen=True)
     avg_intended_air_yards: float = Field(ge=0, frozen=True)
@@ -72,88 +72,81 @@ class PassingMetrics(BaseModel):
     max_air_distance: float = Field(frozen=True)
 
 # validator for player id format ##_#######
-@field_validator('player_id', mode='before')
+@field_validator('gsis_id')
 def validate_player_id(
         cls,
         v: str
 ) -> str:
     """Validate that player_id matches the format ##_####### (two digits, underscore, seven digits)."""
-    pattern = r'^\d{2}_\d{7}$'
+    pattern = r'^\d{2}-\d{7}$'
 
     if not re.match(pattern, v):
-        raise ValueError(f"Player ID {v} does not match format ##_#######.")
+        raise ValueError(f"GSIS ID {v} does not match format ##_#######.")
 
     return v
 
-# position = QB
-@field_validator('position', mode='before')
+# validate season type in ['REG', 'POST']
+@field_validator('season_type')
+def validate_season_type(
+         cls,
+         v: str
+ ) -> str:
+    """Validate that season_type is one of ['REG', 'POST']."""
+    valid_types = ['REG', 'POST']
+    if v not in valid_types:
+        raise ValueError(f"Season type {v} is not in {valid_types}.")
+    return v
+
+ # Validate team abbreviation
+@field_validator('team_abbr')
+def validate_team_abbr(
+        cls,
+        v: str
+) -> str:
+    """Validate that team_abbr is a valid NFL team abbreviation."""
+    valid_teams = [
+        'ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 'DAL', 'DEN',
+        'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC', 'LA', 'LAC', 'LV', 'MIA',
+        'MIN', 'NE', 'NO', 'NYG', 'NYJ', 'PHI', 'PIT', 'SF', 'SEA', 'TB',
+        'TEN', 'WAS'
+    ]
+    if v not in valid_teams:
+        raise ValueError(f"Team abbreviation {v} is not a valid NFL team.")
+    return v
+
+# position in ['QB', 'RB', 'WR', 'TE']
+@field_validator('position')
 def validate_position(
         cls,
         v: str
 ) -> str:
-    """Validate that position 'QB'."""
-    if v != 'QB':
-        raise ValueError(f"Your position {v} is not 'QB'.")
+    """Validate that position is one of ['QB', 'RB', 'WR', 'TE']."""
+    valid_positions = ['QB', 'RB', 'WR', 'TE']
+
+    if v not in valid_positions:
+        raise ValueError(f"Your position {v} is not in ['QB', 'RB', 'WR', 'TE'].")
 
     return v
 
-# change attempts to int before processing in the data model
-@field_validator('attempts', mode='before')
-def attempts_to_int(
+# Convert int fields to int
+@field_validator(
+    'attempts',
+    'pass_touchdowns',
+    'interceptions',
+    'completions',
+    mode='before'
+)
+def to_int(
         cls,
-        v: str
+        v: any,
+        field: str
 ) -> int:
-    """Change attempts to an integer in case in comes in as a float."""
+    """Convert numeric fields to integers, handling float or string inputs."""
     if isinstance(v, int):
         return v
-    else:
-        try:
-            return int(v)
-        except ValueError:
-            raise ValueError(f"Attempts must be an integer. You entered: {v}")
-
-# change pass_touchdowns to int before processing in the data model
-@field_validator('pass_touchdowns', mode='before')
-def pass_touchdowns_to_int(
-        cls,
-        v: str
-) -> int:
-    """Change pass_touchdowns to an integer in case in comes in as a float."""
-    if isinstance(v, int):
-        return v
-    else:
-        try:
-            return int(v)
-        except ValueError:
-            raise ValueError(f"Pass Touchdowns must be an integer. You entered {v}")
-
-# change interceptions to int before processing in the data model
-@field_validator('interceptions', mode='before')
-def interceptions_to_int(
-        cls,
-        v: str
-) -> int:
-    """Change interceptions to an integer in case in comes in as a float."""
-    if isinstance(v, int):
-        return v
-    else:
-        try:
-            return int(v)
-        except ValueError:
-            raise ValueError(f"Interceptions must be an integer. You entered {v}")
-
-# change completions to int before processing in the data model
-@field_validator('completions', mode='before')
-def completions_to_int(
-        cls,
-        v: str
-) -> int:
-    """Change completions to an integer in case in comes in as a float."""
-    if isinstance(v, int):
-        return v
-    else:
-        try:
-            return int(v)
-        except ValueError:
-            raise ValueError(f"Completions must be an integer. You entered {v}")
+    try:
+        return int(float(v))
+    except (ValueError, TypeError):
+        raise ValueError(
+            f"{field} must be convertible to an integer, got {v}")
 

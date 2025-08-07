@@ -25,24 +25,28 @@ class PassingMetrics(BaseModel):
         week (int): The week of the season (0 for season-level aggregation).
         position (str): The player's position (e.g., 'QB').
         team_abbr (str): The team abbreviation (e.g., 'PHI' for Philadelphia Eagles).
-        avg_time_to_throw (float): Average time (in seconds) taken to throw the ball.
-        avg_completed_air_yards (float): Average air yards on completed passes.
-        avg_intended_air_yards (float): Average intended air yards on all pass attempts.
-        avg_air_yards_differential (float): Difference between intended and completed air yards.
-        aggressiveness (float): Measure of aggressive passing tendencies (percentage).
-        max_completed_air_distance (float): Maximum air distance of a completed pass.
-        avg_air_yards_to_sticks (float): Average air yards relative to the first-down marker.
-        attempts (int): Total pass attempts.
-        pass_yards (float): Total passing yards.
-        pass_touchdowns (int): Total passing touchdowns.
-        interceptions (int): Total interceptions thrown.
-        passer_rating (float): Quarterback passer rating.
-        completions (int): Total completed passes.
-        completion_percentage (float): Percentage of passes completed.
-        expected_completion_percentage (float): Expected completion percentage based on play context.
-        completion_percentage_above_expectation (float): Difference between actual and expected completion percentage.
-        avg_air_distance (float): Average air distance of passes.
-        max_air_distance (float): Maximum air distance of any pass attempt.
+        avg_time_to_throw (float): Average time (in seconds) taken to throw the ball. (ngs)
+        avg_completed_air_yards (float): Average air yards on completed passes. (ngs)
+        avg_intended_air_yards (float): Average intended air yards on all pass attempts. (ngs)
+        avg_air_yards_differential (float): Difference between intended and completed air yards. (ngs)
+        aggressiveness (float): Measure of aggressive passing tendencies (percentage). (ngs)
+        max_completed_air_distance (float): Maximum air distance of a completed pass. (ngs)
+        avg_air_yards_to_sticks (float): Average air yards relative to the first-down marker. (ngs)
+        attempts (int): Total pass attempts. (ngs)
+        pass_yards (float): Total passing yards. (ngs)
+        pass_touchdowns (int): Total passing touchdowns. (ngs)
+        interceptions (int): Total interceptions thrown. (ngs)
+        passer_rating (float): Quarterback passer rating. (ngs)
+        completions (int): Total completed passes. (ngs)
+        completion_percentage (float): Percentage of passes completed. (ngs)
+        expected_completion_percentage (float): Expected completion percentage based on play context. (ngs)
+        completion_percentage_above_expectation (float): Difference between actual and expected completion percentage. (ngs)
+        avg_air_distance (float): Average air distance of passes. (ngs)
+        max_air_distance (float): Maximum air distance of any pass attempt. (ngs)
+        sacks (int): Total number of sacks. (weekly)
+        sack_yards (float): Total number of sack yards. (weekly)
+        sack_fumbles (int): Total number of sack fumbles. (weekly)
+        sack_fumbles_lost (int): Total number of sack fumbles lost. (weekly)
     """
     gsis_id: str = Field(min_length=10, max_length=10, frozen=True)
     season: int = Field(ge=1999, le=2025, frozen=False)
@@ -68,6 +72,10 @@ class PassingMetrics(BaseModel):
     completion_percentage_above_expectation: float = Field(frozen=False)
     avg_air_distance: float = Field(frozen=False)
     max_air_distance: float = Field(frozen=False)
+    sacks: int = Field(ge=0, frozen=False)
+    sack_yards: float = Field(ge=0, frozen=False)
+    sack_fumbles: int = Field(ge=0, frozen=False)
+    sack_fumbles_lost: int = Field(ge=0, frozen=False)
 
 # validator for player id format ##_#######
 @field_validator('gsis_id')
@@ -132,6 +140,9 @@ def validate_position(
     'pass_touchdowns',
     'interceptions',
     'completions',
+    'sacks',
+    'sack_fumbles',
+    'sack_fumbles_lost',
     mode='before'
 )
 def to_int(

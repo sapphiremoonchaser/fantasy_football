@@ -20,6 +20,7 @@ class Player(BaseModel):
     Args:
         player_id (str): the nflverse player id
         espn_id (int): espn identifier
+        pfr_id (str): pfr id (for snap counts)
         status (str): whether or not the player is active
         team_abbr (str): the team the player currently plays for
         position (str): one of ('QB', 'RB', 'WR', 'TE', 'DEF')
@@ -28,9 +29,15 @@ class Player(BaseModel):
         college (str): college the player was drafted from
         years_exp (int): years played in the nfl
         age (float): age of the player
+        offense_snaps (int): number of offense snaps (snap_counts)
+        offense_pct (float): number of offense points per week (snap_counts)
+        fantasy_points (float): number of fantasy points per week (weekly)
+        fantasy_points_ppr (float): number of fantasy_points per week (weekly)
+
     """
     player_id: str = Field(min_length=10, max_length=10, frozen=True)
     espn_id: int = Field(frozen=True)
+    pfr_id: str = Field(min_length=1, frozen=True)
     player_name: str = Field(min_length=1, frozen=True)
     status: str = Field(min_length=2, max_length=3, frozen=False)
     team_abbr: str = Field(min_length=2, max_length=3, frozen=False)
@@ -40,6 +47,10 @@ class Player(BaseModel):
     college: str = Field(min_length=1, frozen=True)
     years_exp: int = Field(frozen=False)
     age: float = Field(ge=18, frozen=False)
+    offense_snaps: int = Field(ge=0, frozen=False)
+    offense_pct: float = Field(gt=0, frozen=False)
+    fantasy_points: float = Field(frozen=False)
+    fantasy_points_ppr: float = Field(frozen=False)
 
 # Property for is active
 @property
@@ -93,16 +104,35 @@ def validate_player_id(
 
     return v
 
-# position in ['QB', 'RB', 'WR', 'TE', 'DEF']
+# position in ['QB', 'RB', 'WR', 'TE']
 @field_validator('position')
 def validate_position(
         cls,
         v: str
 ) -> str:
-    """Validate that position is one of ['QB', 'RB', 'WR', 'TE', 'DEF']."""
-    valid_positions = ['QB', 'RB', 'WR', 'TE', 'DEF']
+    """Validate that position is one of ['QB', 'RB', 'WR', 'TE']."""
+    valid_positions = ['QB', 'RB', 'WR', 'TE']
 
     if v not in valid_positions:
-        raise ValueError(f"Your position {v} is not in ['QB', 'RB', 'WR', 'TE', 'DEF'].")
+        raise ValueError(f"Your position {v} is not in ['QB', 'RB', 'WR', 'TE'].")
 
     return v
+
+# Convert int fields to int
+@field_validator(
+    'offense_snaps',
+    mode='before'
+)
+def to_int(
+        cls,
+        v: any,
+        field: str
+) -> int:
+    """Convert numeric fields to integers, handling float or string inputs."""
+    if isinstance(v, int):
+        return v
+    try:
+        return int(float(v))
+    except (ValueError, TypeError):
+        raise ValueError(
+            f"{field} must be convertible to an integer, got {v}")

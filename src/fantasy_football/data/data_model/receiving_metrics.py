@@ -141,3 +141,4 @@ class ReceivingMetrics(BaseModel):
                         f"catch_percentage {v} does not match receptions {receptions} / targets {targets} * 100"
                     )
         return v
+

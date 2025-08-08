@@ -21,7 +21,7 @@ def create_all_dfs() -> AllDataFrames:
             'position',
             'height',
             'weight',
-            'college'
+            'college',
             'age',
             'draft_year'
         ]
@@ -94,10 +94,10 @@ def create_all_dfs() -> AllDataFrames:
     ]
 
     return AllDataFrames(
-        player_id_df,
-        weekly_roster_df,
-        snap_count_df,
-        weekly_stats_df
+        player_id_df=player_id_df,
+        weekly_roster_df=weekly_roster_df,
+        snap_count_df=snap_count_df,
+        weekly_stats_df=weekly_stats_df,
     )
 
 

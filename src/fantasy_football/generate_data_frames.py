@@ -43,6 +43,7 @@ def create_all_dfs() -> AllDataFrames:
     weekly_roster_df = weekly_roster_df[
         [
             'player_id', # Same as gsis_id
+            'position',
             'season',
             'week',
             'status',
@@ -65,7 +66,6 @@ def create_all_dfs() -> AllDataFrames:
             'pfr_game_id',
             'game_type',
             'player',
-            'position',
             'team',
             'opponent',
             'defense_snaps',
@@ -89,6 +89,7 @@ def create_all_dfs() -> AllDataFrames:
     weekly_stats_df = weekly_stats_df[
         [
             'player_id',
+            'position',
             'season',
             'week',
             'fantasy_points',
@@ -114,20 +115,21 @@ def create_qb_dfs(
     :return: QbDataFrames
     """
 
-    # ToDo: Filter player_id
+    # Filter player_id
+    player_id_df = all_data_frames.player_id_df
+    player_id_df = player_id_df[player_id_df['position'] == 'QB']
 
+    # Filter weekly roster
+    weekly_roster_df = all_data_frames.weekly_roster_df
+    weekly_roster_df = weekly_roster_df[weekly_roster_df['position'] == 'QB']
 
-    # ToDo: filter weekly roster
+    # Filter snap count
+    snap_count_df = all_data_frames.snap_count_df
+    snap_count_df = snap_count_df[snap_count_df['position'] == 'QB']
 
-
-    # ToDo: filter snap count
-
-
-    # ToDo: filter weekly stats
-
-
-
-    # ToDo: ngs
+    # Filter weekly stats
+    weekly_stats_df = all_data_frames.weekly_stats_df
+    weekly_stats_df = weekly_stats_df[weekly_stats_df['position'] == 'QB']
 
     # Sacks data
     sacks_df = nfl.import_weekly_data(
@@ -151,6 +153,44 @@ def create_qb_dfs(
         ]
     ]
 
+    # Next-Gen-Stats passing data
+    ngs_passing_df = nfl.import_ngs_data(
+        stat_type='passing',
+        years=[2020, 2021, 2022, 2023, 2024],
+    )
+
+    # Keep only desired columns
+    ngs_passing_df = ngs_passing_df[
+        [
+            'player_gsis_id',
+            'season',
+            'week',
+            'avg_time_to_throw',
+            'avg_completed_air_yards',
+            'avg_intended_air_yards',
+            'avg_air_yards_differential',
+            'aggressiveness',
+            'max_completed_air_distance',
+            'avg_air_yards_to_sticks',
+            'attempts',
+            'pass_yards',
+            'pass_touchdowns',
+            'interceptions',
+            'passer_rating',
+            'completions',
+            'completion_percentage',
+            'expected_completion_percentage',
+            'completion_percentage_above_expectation',
+            'avg_air_distance',
+            'max_air_distance'
+        ]
+    ]
+
     return QbDataFrames(
-        sacks_df,
+        player_id_df=player_id_df,
+        weekly_roster_df=weekly_roster_df,
+        weekly_stats_df=weekly_stats_df,
+        snap_count_df=snap_count_df,
+        sacks_df=sacks_df,
+        ngs_passing_df=ngs_passing_df,
     )

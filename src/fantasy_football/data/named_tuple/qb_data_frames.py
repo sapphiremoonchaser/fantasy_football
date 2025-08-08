@@ -17,5 +17,9 @@ class QbDataFrames(AllDataFrames):
              class, but just here to have a different
              name for the class.
     """
+    player_id_df: DataFrame
+    weekly_roster_df: DataFrame
+    weekly_stats_df: DataFrame
+    snap_count_df: DataFrame
     sacks_df: DataFrame
     ngs_passing_df: DataFrame

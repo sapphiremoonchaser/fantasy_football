@@ -23,8 +23,6 @@ class PassingMetrics(BaseModel):
         season (int): The NFL season year (e.g., 2024).
         season_type (str): The type of season (e.g., 'REG' for regular season).
         week (int): The week of the season (0 for season-level aggregation).
-        position (str): The player's position (e.g., 'QB').
-        team_abbr (str): The team abbreviation (e.g., 'PHI' for Philadelphia Eagles).
         avg_time_to_throw (float): Average time (in seconds) taken to throw the ball. (ngs)
         avg_completed_air_yards (float): Average air yards on completed passes. (ngs)
         avg_intended_air_yards (float): Average intended air yards on all pass attempts. (ngs)
@@ -52,8 +50,6 @@ class PassingMetrics(BaseModel):
     season: int = Field(ge=1999, le=2025, frozen=False)
     season_type: str = Field(min_length=3, max_length=4, frozen=False)
     week: int = Field(ge=0, frozen=False)
-    position: str = Field(frozen=False)
-    team_abbr: str = Field(min_length=2, max_length=3, frozen=False)
     avg_time_to_throw: float = Field(ge=0, frozen=False)
     avg_completed_air_yards: float = Field(ge=0, frozen=False)
     avg_intended_air_yards: float = Field(ge=0, frozen=False)

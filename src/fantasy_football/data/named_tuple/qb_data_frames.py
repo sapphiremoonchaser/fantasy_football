@@ -1,3 +1,5 @@
+from pandas import DataFrame
+
 from fantasy_football.data.named_tuple.all_data_frames import AllDataFrames
 
 
@@ -15,4 +17,5 @@ class QbDataFrames(AllDataFrames):
              class, but just here to have a different
              name for the class.
     """
-    pass
+    sacks_df: DataFrame
+    ngs_passing_df: DataFrame

@@ -30,7 +30,7 @@ def create_all_dfs() -> AllDataFrames:
     # Filter player_id_df to positions ['QB', 'RB', 'WR', 'TE']
     player_id_df = player_id_df[player_id_df['position'].isin(['QB', 'RB', 'WR', 'TE'])]
 
-    # Data from weekly roster
+    # Data from the weekly roster
     weekly_roster_df = nfl.import_weekly_rosters(
         years=[2020, 2021, 2022, 2023, 2024]
     )
@@ -104,7 +104,7 @@ def create_all_dfs() -> AllDataFrames:
     )
 
 
-def filter_dfs_for_qbs(
+def create_qb_dfs(
     all_data_frames: AllDataFrames,
 ) -> QbDataFrames:
     """This function filters down all the data in all
@@ -114,15 +114,43 @@ def filter_dfs_for_qbs(
     :return: QbDataFrames
     """
 
-    # Todo: Add code here to do the filtering.
-    # Todo: Note: The "all_data_frames", the AllDataFrames instance is also a
-    # Todo:       tuple. Therefore, you can use a for loop on it, if that makes
-    # Todo:       it easier.
+    # ToDo: Filter player_id
+
+
+    # ToDo: filter weekly roster
+
+
+    # ToDo: filter snap count
+
+
+    # ToDo: filter weekly stats
+
+
 
     # ToDo: ngs
 
-    # ToDo: sacks from weekly stats
+    # Sacks data
+    sacks_df = nfl.import_weekly_data(
+        years=[2020, 2021, 2022, 2023, 2024],
+        downcast=True
+    )
+
+    # QB only
+    sacks_df = sacks_df[sacks_df['position'] == 'QB']
+
+    # Keep only desired columns
+    sack_df = sacks_df[
+        [
+            'player_id',
+            'season',
+            'week',
+            'sacks',
+            'sack_yards',
+            'sack_fumbles',
+            'sack_fumbles_lost'
+        ]
+    ]
 
     return QbDataFrames(
-        # Todo: Fill this in
+        sacks_df,
     )

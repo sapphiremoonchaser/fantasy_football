@@ -32,20 +32,23 @@ def create_all_dfs() -> AllDataFrames:
 
     # Data from weekly roster
     weekly_roster_df = nfl.import_weekly_rosters(
-        years=[2020, 2021, 2022, 2023, 2024],
-        columns=[
-            'player_id', # Same as gsis_id
-            'season',
-            'week',
-            'status',
-            'years_exp'
-        ]
+        years=[2020, 2021, 2022, 2023, 2024]
     )
 
     # Filter to active only and positions ['QB', 'RB', 'WR', 'TE']
     weekly_roster_df = weekly_roster_df[weekly_roster_df['status'] == 'ACT']
     weekly_roster_df = weekly_roster_df[weekly_roster_df['position'].isin(['QB', 'RB', 'WR', 'TE'])]
 
+    # Keep only desired columns
+    weekly_roster_df = weekly_roster_df[
+        [
+            'player_id', # Same as gsis_id
+            'season',
+            'week',
+            'status',
+            'years_exp'
+        ]
+    ]
 
     # Snap Count data
     snap_count_df = nfl.import_snap_counts(

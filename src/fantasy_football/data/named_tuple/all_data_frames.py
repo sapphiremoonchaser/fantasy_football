@@ -12,6 +12,7 @@ class AllDataFrames(NamedTuple):
              some functions.
     """
 
-    name_of_source_1: DataFrame
-    name_of_source_2: DataFrame
-    name_of_source_n: DataFrame
+    player_id_df: DataFrame
+    snap_count_df: DataFrame
+    weekly_roster_df: DataFrame
+    weekly_stats_df: DataFrame

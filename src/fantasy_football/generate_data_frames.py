@@ -197,31 +197,16 @@ def create_passing_dfs(
         ngs_passing_df=ngs_passing_df,
     )
 
+
 def create_rushing_dfs(
     all_data_frames: AllDataFrames,
 ) -> RbDataFrames:
     """This function filters down all the data in all
-       the data frames to just be data about Rbs.
+       the data frames to just be data about rushers.
 
     :param all_data_frames: AllDataFrames
-    :return: QbDataFrames
+    :return: RbDataFrames
     """
-
-    # Filter player_id
-    player_id_df = all_data_frames.player_id_df
-    player_id_df = player_id_df[player_id_df['position'] == 'RB']
-
-    # Filter weekly roster
-    weekly_roster_df = all_data_frames.weekly_roster_df
-    weekly_roster_df = weekly_roster_df[weekly_roster_df['position'] == 'RB']
-
-    # Filter snap count
-    snap_count_df = all_data_frames.snap_count_df
-    snap_count_df = snap_count_df[snap_count_df['position'] == 'RB']
-
-    # Filter weekly stats
-    weekly_stats_df = all_data_frames.weekly_stats_df
-    weekly_stats_df = weekly_stats_df[weekly_stats_df['position'] == 'RB']
 
     # Next-Gen-Stats rushing data
     ngs_rushing_df = nfl.import_ngs_data(
@@ -250,9 +235,55 @@ def create_rushing_dfs(
     ]
 
     return RbDataFrames(
-        player_id_df=player_id_df,
-        weekly_roster_df=weekly_roster_df,
-        weekly_stats_df=weekly_stats_df,
-        snap_count_df=snap_count_df,
+        player_id_df=all_data_frames.player_id_df,
+        weekly_roster_df=all_data_frames.weekly_roster_df,
+        weekly_stats_df=all_data_frames.weekly_stats_df,
+        snap_count_df=all_data_frames.snap_count_df,
+        ngs_rushing_df=ngs_rushing_df
+    )
+
+
+def create_receiving_dfs(
+    all_data_frames: AllDataFrames,
+) -> WrDataFrames:
+    """This function filters down all the data in all
+       the data frames to just be data about receivers.
+
+    :param all_data_frames: AllDataFrames
+    :return: WrDataFrames
+    """
+
+    # Next-Gen-Stats rushing data
+    ngs_rushing_df = nfl.import_ngs_data(
+        stat_type='rushing',
+        years=[2020, 2021, 2022, 2023, 2024],
+    )
+
+    # Keep only desired columns
+    ngs_rushing_df = ngs_rushing_df[
+        [
+            'player_gsis_id',
+            'season',
+            'week',
+            'avg_cushion',
+            'avg_separation',
+            'avg_intended_air_yards',
+            'percent_share_of_intended_air_yards',
+            'receptions',
+            'targets',
+            'catch_percentage',
+            'yards',
+            'rec_touchdowns',
+            'avg_yac',
+            'avg_expected_yac',
+            'avg_yac_above_expectation'
+        ]
+    ]
+
+    return WrDataFrames(
+        player_id_df=all_data_frames.player_id_df,
+        weekly_roster_df=all_data_frames.weekly_roster_df,
+        weekly_stats_df=all_data_frames.weekly_stats_df,
+        snap_count_df=all_data_frames.snap_count_df,
         ngs_rushing_df=ngs_rushing_df
     )

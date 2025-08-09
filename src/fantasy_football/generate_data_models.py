@@ -4,9 +4,9 @@ from pandas import Series
 
 from fantasy_football.data.data_model.player import Player
 from fantasy_football.data.named_tuple.all_data_frames import AllDataFrames
-from fantasy_football.data.named_tuple.qb_data_frames import QbDataFrames
+from fantasy_football.data.named_tuple.passing_data_frames import QbDataFrames
 from fantasy_football.generate_data_frames import create_all_dfs, \
-    create_qb_dfs
+    create_passing_dfs
 
 
 def create_data_models():
@@ -22,7 +22,7 @@ def create_data_models():
     all_data_frames: AllDataFrames = create_all_dfs()
 
     # Filter down the dataframes to just the QBs.
-    qb_data_frames: QbDataFrames = create_qb_dfs(
+    qb_data_frames: QbDataFrames = create_passing_dfs(
         all_data_frames=all_data_frames,
     )
 

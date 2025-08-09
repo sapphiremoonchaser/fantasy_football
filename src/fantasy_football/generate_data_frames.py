@@ -1,8 +1,8 @@
 import nfl_data_py as nfl
 from fantasy_football.data.named_tuple.all_data_frames import AllDataFrames
-from fantasy_football.data.named_tuple.passing_data_frames import QbDataFrames
-from fantasy_football.data.named_tuple.rushing_data_frames import RbDataFrames
-from fantasy_football.data.named_tuple.receiving_data_frames import WrDataFrames
+from fantasy_football.data.named_tuple.passing_data_frames import PasserDataFrames
+from fantasy_football.data.named_tuple.rushing_data_frames import RusherDataFrames
+from fantasy_football.data.named_tuple.receiving_data_frames import ReceiverDataFrames
 
 
 def create_all_dfs() -> AllDataFrames:
@@ -109,7 +109,7 @@ def create_all_dfs() -> AllDataFrames:
 
 def create_passing_dfs(
     all_data_frames: AllDataFrames,
-) -> QbDataFrames:
+) -> PasserDataFrames:
     """This function filters down all the data in all
        the data frames to just be data about Qbs.
 
@@ -188,7 +188,7 @@ def create_passing_dfs(
         ]
     ]
 
-    return QbDataFrames(
+    return PasserDataFrames(
         player_id_df=player_id_df,
         weekly_roster_df=weekly_roster_df,
         weekly_stats_df=weekly_stats_df,
@@ -200,7 +200,7 @@ def create_passing_dfs(
 
 def create_rushing_dfs(
     all_data_frames: AllDataFrames,
-) -> RbDataFrames:
+) -> RusherDataFrames:
     """This function filters down all the data in all
        the data frames to just be data about rushers.
 
@@ -234,7 +234,7 @@ def create_rushing_dfs(
         ]
     ]
 
-    return RbDataFrames(
+    return RusherDataFrames(
         player_id_df=all_data_frames.player_id_df,
         weekly_roster_df=all_data_frames.weekly_roster_df,
         weekly_stats_df=all_data_frames.weekly_stats_df,
@@ -245,7 +245,7 @@ def create_rushing_dfs(
 
 def create_receiving_dfs(
     all_data_frames: AllDataFrames,
-) -> WrDataFrames:
+) -> ReceiverDataFrames:
     """This function filters down all the data in all
        the data frames to just be data about receivers.
 
@@ -280,7 +280,7 @@ def create_receiving_dfs(
         ]
     ]
 
-    return WrDataFrames(
+    return ReceiverDataFrames(
         player_id_df=all_data_frames.player_id_df,
         weekly_roster_df=all_data_frames.weekly_roster_df,
         weekly_stats_df=all_data_frames.weekly_stats_df,

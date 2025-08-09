@@ -107,7 +107,7 @@ def create_all_dfs() -> AllDataFrames:
     )
 
 
-def create_passing_dfs(
+def create_passer_dfs(
     all_data_frames: AllDataFrames,
 ) -> PasserDataFrames:
     """This function filters down all the data in all
@@ -128,6 +128,14 @@ def create_passing_dfs(
     # Filter snap count
     snap_count_df = all_data_frames.snap_count_df
     snap_count_df = snap_count_df[snap_count_df['position'] == 'QB']
+
+    # Merge snap_counts to player_id to get gsis_id
+    snap_count_df = player_id_df[['player_id', 'pfr_id']].merge(
+        snap_count_df[['season', 'week', 'pfr_player_id', 'offense_snaps', 'offense_pct']],
+        left_on='pfr_id',
+        right_on='pfr_player_id',
+        how='left',
+    )
 
     # Filter weekly stats
     weekly_stats_df = all_data_frames.weekly_stats_df
@@ -194,11 +202,11 @@ def create_passing_dfs(
         weekly_stats_df=weekly_stats_df,
         snap_count_df=snap_count_df,
         sacks_df=sacks_df,
-        ngs_passing_df=ngs_passing_df,
+        ngs_passing_df=ngs_passing_df
     )
 
 
-def create_rushing_dfs(
+def create_rusher_dfs(
     all_data_frames: AllDataFrames,
 ) -> RusherDataFrames:
     """This function filters down all the data in all
@@ -243,7 +251,7 @@ def create_rushing_dfs(
     )
 
 
-def create_receiving_dfs(
+def create_receiver_dfs(
     all_data_frames: AllDataFrames,
 ) -> ReceiverDataFrames:
     """This function filters down all the data in all

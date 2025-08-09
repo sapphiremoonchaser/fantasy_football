@@ -59,9 +59,12 @@ class Player(BaseModel):
     @classmethod
     def create_from_qb_series(
         cls,
-        filter_qf_df_1: Series,
-        filter_qf_df_2: Series,
-        filter_qf_df_n: Series
+        filter_qb_df_1: Series,
+        filter_qb_df_2: Series,
+        filter_qb_df_3: Series,
+        filter_qb_df_4: Series,
+        filter_qb_df_5: Series,
+        filter_qb_df_6: Series
     ) -> "Player":
         """This function creates an instance of the
            Player class from QB series.

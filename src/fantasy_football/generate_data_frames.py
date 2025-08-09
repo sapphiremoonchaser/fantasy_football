@@ -1,6 +1,8 @@
 import nfl_data_py as nfl
 from fantasy_football.data.named_tuple.all_data_frames import AllDataFrames
 from fantasy_football.data.named_tuple.passing_data_frames import QbDataFrames
+from fantasy_football.data.named_tuple.rushing_data_frames import RbDataFrames
+from fantasy_football.data.named_tuple.receiving_data_frames import WrDataFrames
 
 
 def create_all_dfs() -> AllDataFrames:
@@ -199,7 +201,7 @@ def create_rushing_dfs(
     all_data_frames: AllDataFrames,
 ) -> RbDataFrames:
     """This function filters down all the data in all
-       the data frames to just be data about Qbs.
+       the data frames to just be data about Rbs.
 
     :param all_data_frames: AllDataFrames
     :return: QbDataFrames
@@ -207,80 +209,50 @@ def create_rushing_dfs(
 
     # Filter player_id
     player_id_df = all_data_frames.player_id_df
-    player_id_df = player_id_df[player_id_df['position'] == 'QB']
+    player_id_df = player_id_df[player_id_df['position'] == 'RB']
 
     # Filter weekly roster
     weekly_roster_df = all_data_frames.weekly_roster_df
-    weekly_roster_df = weekly_roster_df[weekly_roster_df['position'] == 'QB']
+    weekly_roster_df = weekly_roster_df[weekly_roster_df['position'] == 'RB']
 
     # Filter snap count
     snap_count_df = all_data_frames.snap_count_df
-    snap_count_df = snap_count_df[snap_count_df['position'] == 'QB']
+    snap_count_df = snap_count_df[snap_count_df['position'] == 'RB']
 
     # Filter weekly stats
     weekly_stats_df = all_data_frames.weekly_stats_df
-    weekly_stats_df = weekly_stats_df[weekly_stats_df['position'] == 'QB']
+    weekly_stats_df = weekly_stats_df[weekly_stats_df['position'] == 'RB']
 
-    # Sacks data
-    sacks_df = nfl.import_weekly_data(
-        years=[2020, 2021, 2022, 2023, 2024],
-        downcast=True
-    )
-
-    # QB only
-    sacks_df = sacks_df[sacks_df['position'] == 'QB']
-
-    # Keep only desired columns
-    sacks_df = sacks_df[
-        [
-            'player_id',
-            'season',
-            'week',
-            'sacks',
-            'sack_yards',
-            'sack_fumbles',
-            'sack_fumbles_lost'
-        ]
-    ]
-
-    # Next-Gen-Stats passing data
-    ngs_passing_df = nfl.import_ngs_data(
-        stat_type='passing',
+    # Next-Gen-Stats rushing data
+    ngs_rushing_df = nfl.import_ngs_data(
+        stat_type='rushing',
         years=[2020, 2021, 2022, 2023, 2024],
     )
 
     # Keep only desired columns
-    ngs_passing_df = ngs_passing_df[
+    ngs_rushing_df = ngs_rushing_df[
         [
             'player_gsis_id',
             'season',
             'week',
-            'avg_time_to_throw',
-            'avg_completed_air_yards',
-            'avg_intended_air_yards',
-            'avg_air_yards_differential',
-            'aggressiveness',
-            'max_completed_air_distance',
-            'avg_air_yards_to_sticks',
-            'attempts',
-            'pass_yards',
-            'pass_touchdowns',
-            'interceptions',
-            'passer_rating',
-            'completions',
-            'completion_percentage',
-            'expected_completion_percentage',
-            'completion_percentage_above_expectation',
-            'avg_air_distance',
-            'max_air_distance'
+            'efficiency',
+            'percent_attempts_gte_eight_defenders',
+            'avg_time_to_los',
+            'rush_attempts',
+            'rush_yards',
+            'avg_rush_yards',
+            'rush_touchdowns',
+            'expected_rush_yards',
+            'rush_yards_over_expected',
+            'rush_yards_over_expected_per_att',
+            'rush_pct_over_expected'
         ]
     ]
 
-    return QbDataFrames(
+    return RbDataFrames(
         player_id_df=player_id_df,
         weekly_roster_df=weekly_roster_df,
         weekly_stats_df=weekly_stats_df,
         snap_count_df=snap_count_df,
-        sacks_df=sacks_df,
-        ngs_passing_df=ngs_passing_df,
+        ngs_rushing_df=ngs_rushing_df
     )

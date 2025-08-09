@@ -141,7 +141,7 @@ def create_qb_dfs(
     sacks_df = sacks_df[sacks_df['position'] == 'QB']
 
     # Keep only desired columns
-    sack_df = sacks_df[
+    sacks_df = sacks_df[
         [
             'player_id',
             'season',

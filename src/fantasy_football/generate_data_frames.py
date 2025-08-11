@@ -130,7 +130,7 @@ def create_passer_dfs(
     snap_count_df = snap_count_df[snap_count_df['position'] == 'QB']
 
     # Merge snap_counts to player_id to get gsis_id
-    snap_count_df = player_id_df[['player_id', 'pfr_id']].merge(
+    snap_count_df = player_id_df.merge(
         snap_count_df[['season', 'week', 'pfr_player_id', 'offense_snaps', 'offense_pct']],
         left_on='pfr_id',
         right_on='pfr_player_id',
@@ -262,13 +262,13 @@ def create_receiver_dfs(
     """
 
     # Next-Gen-Stats rushing data
-    ngs_rushing_df = nfl.import_ngs_data(
+    ngs_receiving_df = nfl.import_ngs_data(
         stat_type='rushing',
         years=[2020, 2021, 2022, 2023, 2024],
     )
 
     # Keep only desired columns
-    ngs_rushing_df = ngs_rushing_df[
+    ngs_receiving_df = ngs_receiving_df[
         [
             'player_gsis_id',
             'season',
@@ -293,5 +293,5 @@ def create_receiver_dfs(
         weekly_roster_df=all_data_frames.weekly_roster_df,
         weekly_stats_df=all_data_frames.weekly_stats_df,
         snap_count_df=all_data_frames.snap_count_df,
-        ngs_rushing_df=ngs_rushing_df
+        ngs_rushing_df=ngs_receiving_df
     )

@@ -1,4 +1,4 @@
-from src.fantasy_football.generate_data_frames import (
+from fantasy_football.generate_data_frames import (
     create_passer_dfs,
     create_all_dfs
 )

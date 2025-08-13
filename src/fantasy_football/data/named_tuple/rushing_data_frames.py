@@ -1,9 +1,9 @@
+from typing import NamedTuple
+
 from pandas import DataFrame
 
-from fantasy_football.data.named_tuple.all_data_frames import AllDataFrames
 
-
-class RusherDataFrames(AllDataFrames):
+class RusherDataFrames(NamedTuple):
     """This is a named tuple class that
        stores all the data frames from all
        sources. HOWEVER, the data frames

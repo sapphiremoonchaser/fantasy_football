@@ -5,6 +5,16 @@ from src.fantasy_football.generate_data_frames import (
 
 all_data_frames = create_all_dfs()
 
-qb_data_frames = create_rusher_dfs(all_data_frames)
+rb_data_frames = create_rusher_dfs(all_data_frames)
+
+player_id_df = rb_data_frames.player_id_df
+
+weekly_roster_df = rb_data_frames.weekly_roster_df
+
+weekly_stats_df = rb_data_frames.weekly_stats_df
+
+snap_count_df = rb_data_frames.snap_count_df
+
+ngs_rushing_df = rb_data_frames.ngs_rushing_df
 
 x = 1

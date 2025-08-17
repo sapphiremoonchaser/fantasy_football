@@ -121,9 +121,36 @@ def create_passer_dfs(
     player_id_df = all_data_frames.player_id_df
     player_id_df = player_id_df[player_id_df['position'] == 'QB']
 
+    # Drop columns from player_id dataframe
+    player_id_df = player_id_df[
+        [
+            'gsis_id',
+            'espn_id',
+            'pfr_id',
+            'name',
+            'team',
+            'position',
+            'height',
+            'weight',
+            'college',
+            'age',
+            'draft_year'
+        ]
+    ]
+
     # Filter weekly roster
     weekly_roster_df = all_data_frames.weekly_roster_df
     weekly_roster_df = weekly_roster_df[weekly_roster_df['position'] == 'QB']
+
+    # Remove columns from weekly roster dataframe
+    weekly_roster_df = weekly_roster_df[
+        [
+            'player_id',
+            'season',
+            'week',
+            'years_exp'
+        ]
+    ]
 
     # Filter snap count
     snap_count_df = all_data_frames.snap_count_df
@@ -137,9 +164,30 @@ def create_passer_dfs(
         how='left',
     )
 
+    # Remove columns from snap_count_df
+    snap_count_df = snap_count_df[
+        [
+            'pfr_player_id',
+            'offense_snaps',
+            'offense_pct'
+        ]
+    ]
+
     # Filter weekly stats
     weekly_stats_df = all_data_frames.weekly_stats_df
     weekly_stats_df = weekly_stats_df[weekly_stats_df['position'] == 'QB']
+
+    # Remove position columns from weekly_stats_df
+    weekly_stats_df = weekly_stats_df[
+        [
+            'player_id',
+            'season',
+            'week',
+            'fantasy_points',
+            'fantasy_points_ppr'
+        ]
+    ]
+
 
     # Sacks data
     sacks_df = nfl.import_weekly_data(
@@ -215,6 +263,43 @@ def create_rusher_dfs(
     :param all_data_frames: AllDataFrames
     :return: RbDataFrames
     """
+    # Drop columns from player_id dataframe
+    player_id_df = all_data_frames.player_id_df[
+        [
+            'gsis_id',
+            'espn_id',
+            'pfr_id',
+            'name',
+            'team',
+            'position',
+            'height',
+            'weight',
+            'college',
+            'age',
+            'draft_year'
+        ]
+    ]
+
+    # Remove columns from weekly roster dataframe
+    weekly_roster_df = all_data_frames.weekly_roster_df[
+        [
+            'player_id',
+            'season',
+            'week',
+            'years_exp'
+        ]
+    ]
+
+    # Remove position columns from weekly_stats_df
+    weekly_stats_df = all_data_frames.weekly_stats_df[
+        [
+            'player_id',
+            'season',
+            'week',
+            'fantasy_points',
+            'fantasy_points_ppr'
+        ]
+    ]
 
     # Next-Gen-Stats rushing data
     ngs_rushing_df = nfl.import_ngs_data(
@@ -243,9 +328,9 @@ def create_rusher_dfs(
     ]
 
     return RusherDataFrames(
-        player_id_df=all_data_frames.player_id_df,
-        weekly_roster_df=all_data_frames.weekly_roster_df,
-        weekly_stats_df=all_data_frames.weekly_stats_df,
+        player_id_df=player_id_df,
+        weekly_roster_df=weekly_roster_df,
+        weekly_stats_df=weekly_stats_df,
         snap_count_df=all_data_frames.snap_count_df,
         ngs_rushing_df=ngs_rushing_df
     )
@@ -260,6 +345,43 @@ def create_receiver_dfs(
     :param all_data_frames: AllDataFrames
     :return: WrDataFrames
     """
+    # Drop columns from player_id dataframe
+    player_id_df = all_data_frames.player_id_df[
+        [
+            'gsis_id',
+            'espn_id',
+            'pfr_id',
+            'name',
+            'team',
+            'position',
+            'height',
+            'weight',
+            'college',
+            'age',
+            'draft_year'
+        ]
+    ]
+
+    # Remove columns from weekly roster dataframe
+    weekly_roster_df = all_data_frames.weekly_roster_df[
+        [
+            'player_id',
+            'season',
+            'week',
+            'years_exp'
+        ]
+    ]
+
+    # Remove position columns from weekly_stats_df
+    weekly_stats_df = all_data_frames.weekly_stats_df[
+        [
+            'player_id',
+            'season',
+            'week',
+            'fantasy_points',
+            'fantasy_points_ppr'
+        ]
+    ]
 
     # Next-Gen-Stats rushing data
     ngs_receiving_df = nfl.import_ngs_data(
@@ -289,9 +411,9 @@ def create_receiver_dfs(
     ]
 
     return ReceiverDataFrames(
-        player_id_df=all_data_frames.player_id_df,
-        weekly_roster_df=all_data_frames.weekly_roster_df,
-        weekly_stats_df=all_data_frames.weekly_stats_df,
+        player_id_df=player_id_df,
+        weekly_roster_df=weekly_roster_df,
+        weekly_stats_df=weekly_stats_df,
         snap_count_df=all_data_frames.snap_count_df,
-        ngs_rushing_df=ngs_receiving_df
+        ngs_receiving_df=ngs_receiving_df
     )

@@ -61,22 +61,23 @@ def create_all_dfs() -> AllDataFrames:
     # Filter by position
     snap_count_df = snap_count_df[snap_count_df['position'].isin(['QB', 'RB', 'WR', 'TE'])]
 
-    # drop un-used columns
-    snap_count_df = snap_count_df.drop(
-        columns=[
-            'game_id',
-            'pfr_game_id',
-            'game_type',
-            'player',
-            'team',
-            'opponent',
-            'defense_snaps',
-            'defense_pct',
-            'st_snaps',
-            'st_pct'
-        ]
+    # Merge snap_counts to player_id to get gsis_id
+    snap_count_df = player_id_df.merge(
+        snap_count_df[['season', 'week', 'pfr_player_id', 'offense_snaps', 'offense_pct']],
+        left_on='pfr_id',
+        right_on='pfr_player_id',
+        how='left',
     )
 
+    # Remove columns from snap_count_df
+    snap_count_df = snap_count_df[
+        [
+            'player_id',
+            'position',
+            'offense_snaps',
+            'offense_pct'
+        ]
+    ]
 
     # Weekly stats df
     weekly_stats_df = nfl.import_weekly_data(
@@ -156,23 +157,6 @@ def create_passer_dfs(
     snap_count_df = all_data_frames.snap_count_df
     snap_count_df = snap_count_df[snap_count_df['position'] == 'QB']
 
-    # Merge snap_counts to player_id to get gsis_id
-    snap_count_df = player_id_df.merge(
-        snap_count_df[['season', 'week', 'pfr_player_id', 'offense_snaps', 'offense_pct']],
-        left_on='pfr_id',
-        right_on='pfr_player_id',
-        how='left',
-    )
-
-    # Remove columns from snap_count_df
-    snap_count_df = snap_count_df[
-        [
-            'pfr_player_id',
-            'offense_snaps',
-            'offense_pct'
-        ]
-    ]
-
     # Filter weekly stats
     weekly_stats_df = all_data_frames.weekly_stats_df
     weekly_stats_df = weekly_stats_df[weekly_stats_df['position'] == 'QB']
@@ -187,7 +171,6 @@ def create_passer_dfs(
             'fantasy_points_ppr'
         ]
     ]
-
 
     # Sacks data
     sacks_df = nfl.import_weekly_data(
@@ -279,6 +262,8 @@ def create_rusher_dfs(
             'draft_year'
         ]
     ]
+    # Filter player_id_df to desired positions
+    player_id_df = player_id_df[player_id_df['position'].isin(['RB', 'WR', 'TE'])]
 
     # Remove columns from weekly roster dataframe
     weekly_roster_df = all_data_frames.weekly_roster_df[
@@ -289,6 +274,8 @@ def create_rusher_dfs(
             'years_exp'
         ]
     ]
+    # Filter weekly_roster_df to desired positions
+    weekly_roster_df = weekly_roster_df[weekly_roster_df['position'].isin(['RB', 'WR', 'TE'])]
 
     # Remove position columns from weekly_stats_df
     weekly_stats_df = all_data_frames.weekly_stats_df[
@@ -300,12 +287,20 @@ def create_rusher_dfs(
             'fantasy_points_ppr'
         ]
     ]
+    # Filter weekly_stats_df to desired positions
+    weekly_stats_df = weekly_stats_df[weekly_stats_df['position'].isin(['RB', 'WR', 'TE'])]
+
+    # Filter snap count dataframe to desired positions
+    snap_count_df = all_data_frames.snap_count_df
+    snap_count_df = snap_count_df[snap_count_df['position'].isin(['RB', 'WR', 'TE'])]
 
     # Next-Gen-Stats rushing data
     ngs_rushing_df = nfl.import_ngs_data(
         stat_type='rushing',
         years=[2020, 2021, 2022, 2023, 2024],
     )
+    # Filter ngs_rushing_df to desired positions
+    ngs_rushing_df = ngs_rushing_df[ngs_rushing_df['position'].isin(['RB', 'WR', 'TE'])]
 
     # Keep only desired columns
     ngs_rushing_df = ngs_rushing_df[
@@ -331,7 +326,7 @@ def create_rusher_dfs(
         player_id_df=player_id_df,
         weekly_roster_df=weekly_roster_df,
         weekly_stats_df=weekly_stats_df,
-        snap_count_df=all_data_frames.snap_count_df,
+        snap_count_df=snap_count_df,
         ngs_rushing_df=ngs_rushing_df
     )
 
@@ -361,6 +356,8 @@ def create_receiver_dfs(
             'draft_year'
         ]
     ]
+    # Filter player_id_df to desired positions
+    player_id_df = player_id_df[player_id_df['position'].isin(['RB', 'WR', 'TE'])]
 
     # Remove columns from weekly roster dataframe
     weekly_roster_df = all_data_frames.weekly_roster_df[
@@ -371,6 +368,8 @@ def create_receiver_dfs(
             'years_exp'
         ]
     ]
+    # Filter weekly_roster_df to desired positions
+    weekly_roster_df = weekly_roster_df[weekly_roster_df['position'].isin(['RB', 'WR', 'TE'])]
 
     # Remove position columns from weekly_stats_df
     weekly_stats_df = all_data_frames.weekly_stats_df[
@@ -382,12 +381,20 @@ def create_receiver_dfs(
             'fantasy_points_ppr'
         ]
     ]
+    # Filter weekly_roster_df to desired positions
+    weekly_stats_df = weekly_stats_df[weekly_stats_df['position'].isin(['RB', 'WR', 'TE'])]
+
+    # Filter snap count dataframe to desired positions
+    snap_count_df = all_data_frames.snap_count_df
+    snap_count_df = snap_count_df[snap_count_df['position'].isin(['RB', 'WR', 'TE'])]
 
     # Next-Gen-Stats rushing data
     ngs_receiving_df = nfl.import_ngs_data(
         stat_type='rushing',
         years=[2020, 2021, 2022, 2023, 2024],
     )
+    # Filter ngs_receiving_df to desired positions
+    ngs_receiving_df = ngs_receiving_df[ngs_receiving_df['position'].isin(['RB', 'WR', 'TE'])]
 
     # Keep only desired columns
     ngs_receiving_df = ngs_receiving_df[
@@ -414,6 +421,6 @@ def create_receiver_dfs(
         player_id_df=player_id_df,
         weekly_roster_df=weekly_roster_df,
         weekly_stats_df=weekly_stats_df,
-        snap_count_df=all_data_frames.snap_count_df,
+        snap_count_df=snap_count_df,
         ngs_receiving_df=ngs_receiving_df
     )

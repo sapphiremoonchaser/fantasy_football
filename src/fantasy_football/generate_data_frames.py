@@ -72,7 +72,10 @@ def create_all_dfs() -> AllDataFrames:
     # Remove columns from snap_count_df
     snap_count_df = snap_count_df[
         [
-            'player_id',
+            'gsis_id',
+            'name',
+            'season',
+            'week',
             'position',
             'offense_snaps',
             'offense_pct'

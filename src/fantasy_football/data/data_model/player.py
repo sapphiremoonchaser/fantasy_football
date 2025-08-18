@@ -57,20 +57,22 @@ class Player(BaseModel):
     fantasy_points_ppr: float = Field(frozen=False)
 
     @classmethod
-    def create_from_qb_series(
+    def create_from_qb_df(
         cls,
         player_id_df: Series,
-        filter_qb_df_2: Series,
-        filter_qb_df_3: Series,
-        filter_qb_df_4: Series,
-        filter_qb_df_5: Series,
-        filter_qb_df_6: Series
+        weekly_roster_df: Series,
+        weekly_stats_df: Series,
+        snap_count_df: Series,
+        sacks_df: Series,
+        ngs_passing_df: Series
     ) -> "Player":
         """This function creates an instance of the
            Player class from QB series.
-        :param player_id_df: The first QB series.
-        :param filter_qf_df_2: The second QB series.
-        :param filter_qf_df_n: The third QB series.
+        :param player_id_df: Series containing player identifiers
+        :param weekly_roster_df: Series with data from weekly roster
+        :param weekly_stats_df: Series with fantasy points.
+        :param snap_count_df: Series with snap counts and snap count pct
+        :param sacks_df: Series with sack counts
         :return: The Player instance.
         """
 

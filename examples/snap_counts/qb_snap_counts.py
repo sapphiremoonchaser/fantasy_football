@@ -37,4 +37,7 @@ snap_count_df_pivot = snap_count_df_pivot[
     ]
 ]
 
+# Get count
+quarterbacks = snap_count_df_pivot[snap_count_df_pivot['name'] == 'Bryce Young']
+
 x = 1

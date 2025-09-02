@@ -3,14 +3,14 @@ import pandas as pd
 from typing import List
 
 def fetch_schedule(
-        seasons: List[str]
+        seasons: List[int]
 ) -> pd.DataFrame:
     # Fetch the nfl schedule for the given years
     schedule = nfl.import_schedules(seasons)
 
     # Filter for regular season games
     schedule = schedule[
-        schedule['season_type'] == 'REG'
+        schedule['game_type'] == 'REG'
     ]
 
     # Select and rename relevant columns
@@ -20,7 +20,7 @@ def fetch_schedule(
         'gameday',
         'home_team',
         'away_team',
-        'game_time'
+        'gametime'
     ]].copy()
 
     df = df.rename(columns={
@@ -29,7 +29,7 @@ def fetch_schedule(
         'gameday': 'Date',
         'home_team': 'Home Team',
         'away_team': 'Away Team',
-        'game_time': 'Time'
+        'gametime': 'Time'
     })
 
     # Replace missing time with 'TBD'
